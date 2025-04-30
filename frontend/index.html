@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codeforces Recommender</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Codeforces Recommender</h1>
+    <p>Enter your Codeforces handle to predict ratings and get tailored problems for practice</p>
+    <div class="input-group">
+      <input type="text" id="handle" placeholder="Enter your CF handle">
+      <button onclick="fetchRecommendations()">Get Recommendations</button>
+    </div>
+    <div id="results"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
