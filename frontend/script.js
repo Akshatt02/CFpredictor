@@ -1,5 +1,5 @@
 function fetchRecommendations() {
-    const backendURL = 'http://localhost:5000';
+    const backendURL = 'https://cf-rating-predictor-and-problem.onrender.com';
     const handle = document.getElementById('handle').value.trim();
     document.getElementById('results').innerHTML = `<p>Loading...</p>`;
     const req = { handle };
