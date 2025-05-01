@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
-from predictor import fetch_user_data, predict_from_profile
-from recommender import recommend_problems
+from predictor_recommender import fetch_user_data, predict_from_profile, recommend_problems
 import os
 from flask_cors import CORS
 
