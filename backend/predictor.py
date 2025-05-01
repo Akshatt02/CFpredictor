@@ -95,4 +95,9 @@ def predict_from_profile(user):
     X_scaled_df = pd.DataFrame(scaler.transform(df), columns=df.columns)
     pred = model.predict(X_scaled_df)[0]
 
-    return round(pred)
+    rating_change = round(pred - user["current_rating"], 2)
+
+    return {
+        "predicted_rating": round(pred),
+        "rating_change": round(rating_change),
+    }

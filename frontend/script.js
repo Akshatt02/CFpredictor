@@ -14,7 +14,16 @@ function fetchRecommendations() {
         if (data.error) {
             document.getElementById('results').innerHTML = `<p class="error-text">Error: ${data.error}</p>`;
         } else {
-            let resultHTML = `<p class="prediction-text">Predicted Rating after 5 contests: <strong>${data.predicted_rating}</strong></p>`;
+            let resultHTML = `<p>Current Rating: <strong>${data.predicted_rating - data.rating_change}</strong></p>`;
+            resultHTML += `<p>Predicted Rating after 5 contests: <strong>${data.predicted_rating}</strong></p>`;
+            if (data.rating_change > 0) {
+                resultHTML += `<p>Rating Change: <strong>+${data.rating_change}</strong></p>`;
+            }
+            else if (data.rating_change < 0) {
+                resultHTML += `<p>Rating Change: <strong>${data.rating_change}</strong></p>`;
+            } else {
+                resultHTML += `<p>Rating Change: <strong>${data.rating_change}</strong></p>`;
+            }
             resultHTML += `<h3>Recommended Problems:</h3><ul>`;
             data.recommendations.forEach(problem => {
                 resultHTML += `<li><a href="${problem.url}" target="_blank">${problem.name}</a></li>`;

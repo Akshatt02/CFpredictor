@@ -17,11 +17,12 @@ def handle_request():
         handle = user_data["handle"]
         user_profile = fetch_user_data(handle)
 
-        prediction = predict_from_profile(user_profile)
-        recommendations = recommend_problems(user_profile, prediction)
+        result = predict_from_profile(user_profile)
+        recommendations = recommend_problems(user_profile, result["predicted_rating"])
 
         return jsonify({
-            "predicted_rating": prediction,
+            "predicted_rating": result["predicted_rating"],
+            "rating_change": result["rating_change"],
             "recommendations": recommendations
         })
 
