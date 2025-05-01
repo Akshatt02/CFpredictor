@@ -1,9 +1,10 @@
 function fetchRecommendations() {
+    const backendURL = 'http://localhost:5000';
     const handle = document.getElementById('handle').value.trim();
     document.getElementById('results').innerHTML = `<p>Loading...</p>`;
     const req = { handle };
     document.getElementById('results').style.display = "block";
-    fetch('http://localhost:5000', {
+    fetch(backendURL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(req),

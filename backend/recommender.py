@@ -12,15 +12,26 @@ def recommend_problems(user_data, predicted_rating, count=10):
                 continue
 
             for problem, stats in zip(res['result']['problems'], res['result']['problemStatistics']):
-                if 'rating' in problem and problem['rating'] - predicted_rating <= 200 and problem['rating'] - predicted_rating >= 0:
-                    problems.append({
-                        "name": problem['name'],
-                        "contestId": problem['contestId'],
-                        "index": problem['index'],
-                        "rating": problem.get('rating', '?'),
-                        "tags": problem['tags'],
-                        "url": f"https://codeforces.com/contest/{problem['contestId']}/problem/{problem['index']}"
-                    })
+                if predicted_rating >= 3000:
+                    if 'rating' in problem and problem['rating'] >= 3000:
+                        problems.append({
+                            "name": problem['name'],
+                            "contestId": problem['contestId'],
+                            "index": problem['index'],
+                            "rating": problem.get('rating', '?'),
+                            "tags": problem['tags'],
+                            "url": f"https://codeforces.com/contest/{problem['contestId']}/problem/{problem['index']}"
+                        })
+                else: 
+                    if 'rating' in problem and problem['rating'] - predicted_rating <= 200 and problem['rating'] - predicted_rating >= 0:
+                        problems.append({
+                            "name": problem['name'],
+                            "contestId": problem['contestId'],
+                            "index": problem['index'],
+                            "rating": problem.get('rating', '?'),
+                            "tags": problem['tags'],
+                            "url": f"https://codeforces.com/contest/{problem['contestId']}/problem/{problem['index']}"
+                        })
         except:
             continue
 

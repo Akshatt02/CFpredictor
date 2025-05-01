@@ -1,8 +1,11 @@
 from flask import Flask, request, jsonify
+from dotenv import load_dotenv
 from predictor import fetch_user_data, predict_from_profile
 from recommender import recommend_problems
 import os
 from flask_cors import CORS
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -30,5 +33,6 @@ def handle_request():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=True, port=port)
+    port = int(os.getenv("PORT", os.environ.get("PORT", 5000)))
+    debug_mode = os.getenv("DEBUG", "False").lower() == "true"
+    app.run(host="0.0.0.0", port=port, debug=debug_mode)
