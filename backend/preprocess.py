@@ -1,8 +1,8 @@
 import os
 import json
 import joblib
-import pandas as pd
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -13,8 +13,8 @@ def load_data(path="data/training_data.json"):
 def extract_all_tags(data):
     tags = set()
     for u in data:
-        tags.update(u["tag_submission_count"])
-        tags.update(u["tag_ac_count"])
+        tags.update(u["tag_submission_count"].keys())
+        tags.update(u["tag_ac_count"].keys())
     return sorted(tags)
 
 def create_user_profile(u, all_tags):
@@ -22,11 +22,11 @@ def create_user_profile(u, all_tags):
     ac_subs    = u["ac_submissions"]
     history    = u.get("rating_history", [])
     contest_ct = len(history)
-    rating_min  = min(history) if history else 0
-    rating_max  = max(history) if history else 0
-    rating_first= history[0] if history else 0
-    rating_last = history[-1] if history else 0
-    
+    rating_min   = min(history) if history else 0
+    rating_max   = max(history) if history else 0
+    rating_first = history[0] if history else 0
+    rating_last  = history[-1] if history else 0
+
     profile = {
         "handle": u["handle"],
         "total_submissions": total_subs,
@@ -37,12 +37,15 @@ def create_user_profile(u, all_tags):
         "rating_range": rating_max - rating_min,
         "rating_trend": rating_last - rating_first,
         "rating_mean": np.mean(history) if history else 0,
-        "rating_std": np.std(history)  if history else 0,
+        "rating_std":  np.std(history)  if history else 0,
         "avg_subs_per_contest": total_subs / contest_ct if contest_ct else 0,
-        "tag_diversity": len(u["tag_submission_count"]),
-        "top_tag_sub_ratio": (max(u["tag_submission_count"].values()) / total_subs) if total_subs and u["tag_submission_count"] else 0,
-        "avg_ac_per_contest": ac_subs / contest_ct if contest_ct else 0,
-        "tag_success_diversity": len([t for t,v in u["tag_ac_count"].items() if v > 0]),
+        "avg_ac_per_contest":   ac_subs    / contest_ct if contest_ct else 0,
+        "tag_diversity":         len(u["tag_submission_count"]),
+        "tag_success_diversity": len([t for t,v in u["tag_ac_count"].items() if v>0]),
+        "top_tag_sub_ratio": (
+            max(u["tag_submission_count"].values(), default=0) / total_subs
+            if total_subs else 0
+        ),
     }
 
     for i in range(30):
@@ -55,13 +58,12 @@ def create_user_profile(u, all_tags):
     return profile
 
 def main():
-    os.makedirs("data", exist_ok=True)
+    os.makedirs("data",   exist_ok=True)
     os.makedirs("models", exist_ok=True)
 
     data = load_data()
-    all_tags = extract_all_tags(data)
-
-    profiles = [create_user_profile(u, all_tags) for u in data]
+    tags = extract_all_tags(data)
+    profiles = [create_user_profile(u, tags) for u in data]
     df = pd.DataFrame(profiles)
 
     X = df.drop(columns=["handle", "current_rating"])
@@ -81,7 +83,7 @@ def main():
     y_test.to_csv("data/y_test.csv",  index=False)
 
     joblib.dump(scaler, "models/scaler.pkl")
-    print("Preprocessing complete. CSVs saved to data/, scaler saved to models/scaler.pkl")
+    print("Preprocessing complete.")
 
 if __name__ == "__main__":
     main()
