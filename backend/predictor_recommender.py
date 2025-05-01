@@ -105,9 +105,9 @@ def predict_from_profile(user):
     }
 
 def recommend_problems(user_data, predicted_rating, count=10):
-    weak_tags = sorted(user_data['tag_ac_count'],key=lambda tag: user_data['tag_ac_count'][tag] / user_data['tag_submission_count'].get(tag, 1))[:3]
+    weak_tags = sorted(user_data['tag_ac_count'],key=lambda tag: user_data['tag_ac_count'][tag] / user_data['tag_submission_count'].get(tag, 1))[:5]
 
-    ignored_tags = {"special problem", "interactive", "implementation"}
+    ignored_tags = {"*special", "interactive", "implementation"}
 
     solved_set = set()
     for s in user_data.get("submissions", []):
